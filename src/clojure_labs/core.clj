@@ -50,7 +50,7 @@
     (fn [acc elem]
       (conj acc (callback elem))
       )
-    []
+    '()
     coll
     )
   )
@@ -64,10 +64,48 @@
         acc
         )
       )
-    []
+    '()
     coll
     )
   )
+
+;; 1.4
+
+(defn extend-strings [symbols strings]
+  (reduce                                                   ;; walk through the strings
+    (fn [acc string]
+      (concat acc                                           ;; concat prev and new strings
+        (filter identity  ;: filter non nil with identity callback: (a) => a (everything is truly except nil and false, they are falsy)
+          (map
+           (fn [symbol]
+             (when (or (empty? string) (not= (str symbol) (str (last string))))
+               (str string symbol)
+             )                                              ;; nil if not
+           )
+           symbols
+         )
+        )
+      )
+    )
+  []
+  strings
+  )
+)
+
+(defn generate-strings-elem-ops [symbols n]
+  (cond
+    (= n 0) '("")
+    (= n 1) (map str symbols)
+    :else
+    (reduce                                                 ;; extend strs n-1 times
+      (fn [strings _]
+        (extend-strings symbols strings)
+      )
+      (map str symbols)                                     ; val (just symbs list)
+      (range 1 n)                                           ; col ( (1...n) ) - do n-1 times
+    )
+  )
+)
 
 ;; tests
 (let [abc ["a", "b", "c"]]
@@ -80,6 +118,9 @@
     (println result1)
     )
 
+  (let [result2 (generate-strings-elem-ops abc 3)]
+    (println result2)
+    )
   )
 
 (let [ints [1, 2, 3, 4, 5, 6, 7]]
