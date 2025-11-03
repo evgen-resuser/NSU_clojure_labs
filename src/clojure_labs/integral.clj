@@ -55,7 +55,8 @@
 (let [f (fn [t] (* t t))
       I (integral f 0.001)]
   (println (I 1))
-  (println (I 2))
+  (println (I 1.2))
+  (println (I 1.1))
   ;(println (I 5))
   ;(println (I 3))
 )
