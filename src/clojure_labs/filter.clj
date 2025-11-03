@@ -24,7 +24,7 @@
 )
 
 (defn future-filter [pred coll blocks-count]
-  (let [parts   (split coll blocks-count)
+  (let [parts (split coll blocks-count)
         futures (map
                   (fn [part]
                      (future (doall (filter pred part)))
@@ -44,7 +44,6 @@
     [result (/ (- end start) 1e6)]))
 
 (defn -main []
-  ;; Создаём большую коллекцию случайных чисел
   (let [data (repeatedly 10000 #(rand-int 1000000))
         pred (fn [x]
                (Thread/sleep 1)
@@ -57,16 +56,19 @@
     (let [[res1 time1] (measure-time #(doall (filter pred data)))]
       (println "\nfilter:")
       (println "  after filtering:" (count res1))
-      (println "  time ms:" (format "%.10f" time1)))
+      (println "  time ms:" (format "%.10f" time1))
+    )
 
     (let [[res2 time2] (measure-time #(doall (future-filter pred data 10)))]
       (println "\nfuture-filter (10):")
       (println "  after filtering:" (count res2))
-      (println "  time ms:" (format "%.10f" time2)))
+      (println "  time ms:" (format "%.10f" time2))
+    )
 
     (let [[res3 time3] (measure-time #(doall (future-filter pred data 20)))]
       (println "\nfuture-filter (20):")
       (println "  after filtering:" (count res3))
-      (println "  time ms:" (format "%.10f" time3)))
+      (println "  time ms:" (format "%.10f" time3))
+    )
     ))
 
