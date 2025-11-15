@@ -46,7 +46,7 @@
 (defn -main []
   (let [data (repeatedly 10000 #(rand-int 1000000))
         pred (fn [x]
-               (Thread/sleep 1)
+               ;(Thread/sleep 1)
                (= 0 (mod x 7))
              )
         ]
