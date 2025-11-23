@@ -209,7 +209,7 @@
   )
 )
 
-;; apply 2nd step rules on expression
+;; apply 1st step rules on expression
 (defn step1-expr [expr]
   (to-dnf-by-step expr step1-rules))
 
@@ -272,6 +272,7 @@
   )
 )
 
+;; apply 2nd step rules on expression
 (defn step2-expr [expr]
   (to-dnf-by-step expr step2-rules))
 
@@ -549,14 +550,15 @@
   (println "!A: " (to-dnf (negation (variable :A))))
   (println "!!A: " (to-dnf (negation (negation (variable :A)))))
   (println "A or true" (to-dnf (disjunction (variable :A) const-true)))
+  (println "A or false or false: " (to-dnf (disjunction (variable :A) const-false const-false)))
   (println "false and B" (to-dnf (conjunction const-false (variable :B))))
   (println "A -> B: " (to-dnf (implication (variable :A) (variable :B))))
   (println "true -> B: " (to-dnf (implication const-true (variable :B))))
-  (println "A XOR B: " (to-dnf (pierce (variable :A) (variable :B))))
-  (println "A XOR (B or !C): " (to-dnf (pierce (variable :A) (disjunction (variable :B) (negation (variable :C))))))
-  (println "A XOR (B or ! false): " (to-dnf (pierce (variable :A) (disjunction (variable :B) (negation const-false)))))
-  (println "false XOR (B or !C): " (to-dnf (pierce const-false (disjunction (variable :B) (negation (variable :C))))))
-  (println "A or (B XOR !C): " (to-dnf (disjunction (variable :A) (pierce (variable :B) (negation (variable :C))))))
+  (println "A NOR B: " (to-dnf (pierce (variable :A) (variable :B))))
+  (println "A NOR (B or !C): " (to-dnf (pierce (variable :A) (disjunction (variable :B) (negation (variable :C))))))
+  (println "A NOR (B or ! false): " (to-dnf (pierce (variable :A) (disjunction (variable :B) (negation const-false)))))
+  (println "false NOR (B or !C): " (to-dnf (pierce const-false (disjunction (variable :B) (negation (variable :C))))))
+  (println "A or (B NOR !C): " (to-dnf (disjunction (variable :A) (pierce (variable :B) (negation (variable :C))))))
 
   (println)
 
@@ -566,7 +568,7 @@
   (println "!A and B (A = true): " (to-dnf {:A const-true} (conjunction (negation (variable :A)) (variable :B))))
   (println "A or B (A = false, B = true): " (to-dnf {:A const-false :B const-true} (disjunction (variable :A) (variable :B))))
   (println "A -> B (A = false): " (to-dnf {:A const-true} (implication (variable :A) (variable :B))))
-  (println "A XOR B (A = false, B = true): " (to-dnf {:A const-false :B const-true} (pierce (variable :A) (variable :B))))
-  (println "A XOR B (A = false, B = false): " (to-dnf {:A const-false :B const-false} (pierce (variable :A) (variable :B))))
-  (println "A XOR (B or !C) (C = false): " (to-dnf {:C const-false} (pierce (variable :A) (disjunction (variable :B) (negation (variable :C))))))
+  (println "A NOR B (A = false, B = true): " (to-dnf {:A const-false :B const-true} (pierce (variable :A) (variable :B))))
+  (println "A NOR B (A = false, B = false): " (to-dnf {:A const-false :B const-false} (pierce (variable :A) (variable :B))))
+  (println "A NOR (B or !C) (C = false): " (to-dnf {:C const-false} (pierce (variable :A) (disjunction (variable :B) (negation (variable :C))))))
 )
