@@ -145,7 +145,6 @@
   )
 )
 
-;; apply 1st step rules on expression
 (defn define-expr* [subst-map expr]
   (to-dnf-by-step expr (define-rules* subst-map))
 )
@@ -404,7 +403,7 @@
            (some const-false? vals)
            const-false
 
-           ;; if const is true === everything is true
+           ;; if there are nothing after the true filtering === result is true
            (empty? (filter #(not (= const-true %)) vals))
            const-true
 
